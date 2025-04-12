@@ -1,10 +1,15 @@
 <?php
 session_start();
-error_reporting(0);
-
+//Database Configuration File
 include('includes/config.php');
-$vid=$_GET['viewid'];
-?>
+error_reporting(0);
+//verifying Session
+if(strlen($_SESSION['emplogin'])==0)
+  { 
+header('location:emp-login.php');
+}
+else{
+  ?>
 <!doctype html>
 
 <html>
@@ -15,52 +20,19 @@ $vid=$_GET['viewid'];
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Job Portal || Home Page</title>
+<title>Employer | Search Job</title>
 
 <!--CUSTOM CSS-->
 
-<link href="css/custom.css" rel="stylesheet" type="text/css">
+<link href="../css/custom.css" rel="stylesheet" type="text/css">
 
-<!--BOOTSTRAP CSS-->
-
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-
-<!--COLOR CSS-->
-
-<link href="css/color.css" rel="stylesheet" type="text/css">
-
-<!--RESPONSIVE CSS-->
-
-<link href="css/responsive.css" rel="stylesheet" type="text/css">
-
-<!--OWL CAROUSEL CSS-->
-
-<link href="css/owl.carousel.css" rel="stylesheet" type="text/css">
-
-<!--FONTAWESOME CSS-->
-
-<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-<!--SCROLL FOR SIDEBAR NAVIGATION-->
-
-<link href="css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
-
-<!--FAVICON ICON-->
-
-<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-
-<!--GOOGLE FONTS-->
-
+<link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="../css/color.css" rel="stylesheet" type="text/css">
+<link href="../css/responsive.css" rel="stylesheet" type="text/css">
+<link href="../css/owl.carousel.css" rel="stylesheet" type="text/css">
+<link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,500,700,900' rel='stylesheet' type='text/css'>
-
-<!--[if lt IE 9]>
-
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
-    <![endif]-->
-
 </head>
 
 
@@ -72,20 +44,32 @@ $vid=$_GET['viewid'];
 <div id="wrapper"> 
 
   <!--HEADER START-->
-<?php include_once('includes/header.php');?>
+  <?php include('includes/header.php');?>
   <!--HEADER END--> 
+  <!--INNER BANNER START-->
+
+  <section id="inner-banner">
+
+    <div class="container">
+
+      <h1>Employer | Search Jobs</h1>
+
+    </div>
+
+  </section>
+
+  <!--INNER BANNER END--> 
+
+  
+
+  
+
+  
 
   <!--MAIN START-->
 
   <div id="main"> 
 
-    <!--POPULAR JOB CATEGORIES START-->
-
-   
-
-    <!--POPULAR JOB CATEGORIES END--> 
-
-    
 
     <!--RECENT JOB SECTION START-->
 
@@ -97,18 +81,18 @@ $vid=$_GET['viewid'];
 
           <div class="col-md-12 col-sm-8">
 
+
             <div id="content-area">
-             
 
               <h2 style="color: red">Job search against <?php  echo htmlentities($_POST['jobtitle']);?></h2> 
 
               <ul id="myList">
 
-                <li>
 <?php
 $jobtitle=$_POST['jobtitle'];
-$company=$_POST['company'];
-         if (isset($_GET['page_no']) && $_GET['page_no']!="") {
+//Geeting Employer Id
+$empid=$_SESSION['emplogin'];
+if (isset($_GET['page_no']) && $_GET['page_no']!="") {
   $page_no = $_GET['page_no'];
   } else {
     $page_no = 1;
@@ -126,46 +110,105 @@ $results1=$query1->fetchAll(PDO::FETCH_OBJ);
 $total_rows=$query1->rowCount();
 $total_no_of_pages = ceil($total_rows / $no_of_records_per_page);
   $second_last = $total_no_of_pages - 1; // total page minus 1
-  $vid=$_GET['viewid'];
-$sql="SELECT tbljobs.*,tblemployers.CompnayLogo,tblemployers.CompnayName from tbljobs join tblemployers on tblemployers.id=tbljobs.employerId where tbljobs.jobTitle=:jobtitle || tblemployers.CompnayName=:company LIMIT $offset, $no_of_records_per_page";
+
+// Fetching jobs
+$sql = "SELECT tbljobs.*,tblemployers.CompnayLogo from tbljobs join tblemployers on tblemployers.id=tbljobs.employerId  where employerId=:eid && tbljobs.jobTitle=:jobtitle LIMIT $offset, $no_of_records_per_page";
 $query = $dbh -> prepare($sql);
+$query-> bindParam(':eid', $empid, PDO::PARAM_STR);
 $query->bindParam(':jobtitle',$jobtitle,PDO::PARAM_STR);
-$query->bindParam(':company',$company,PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
-
-$cnt=1;
 if($query->rowCount() > 0)
 {
-foreach($results as $row)
-{               ?>
+foreach($results as $result)
+{
 
-  
-                  <div class="box">
 
-                    <div class="thumb"><a href="jobs-details.php?jid=<?php echo ($row->jobId);?>"><img src="employers/employerslogo/<?php echo $row->CompnayLogo;?>" width="100" height="100"></a></div>
+ ?>
 
-                    <div class="text-col">
+ <li>
+<div class="box">
+<div class="thumb">
+ <!-- logo --> 
+  <a href="job-details.php?jobid=<?php echo htmlentities($result->jobId);?>"><img src="employerslogo/<?php echo htmlentities($result->CompnayLogo);?>" alt="img" width="60" height="60"></a></div>
 
-                      <h4><a href="jobs-details.php?jid=<?php echo ($row->jobId);?>"><?php  echo htmlentities($row->jobTitle);?></a></h4>
+<div class="text-col">
+<div class="hold" style="width:100%">
 
-                      <p><?php  echo htmlentities($row->CompnayName);?></p>
+ <!-- Job Title -->  
+<h4><a href="job-details.php?jobid=<?php echo htmlentities($result->jobId);?>" title='View Details'><?php echo htmlentities($result->jobTitle);?></a> --------- <em><a href="edit-job.php?jobid=<?php echo htmlentities($result->jobId);?>" title='Edit Job Details'>(Edit this job)</a></em></h4>
 
-                      <a href="jobs-details.php?jid=<?php echo ($row->jobId);?>" class="text"><i class="fa fa-map-marker"></i><?php  echo htmlentities($row->jobLocation);?></a> <a href="#" class="text"><i class="fa fa-calendar"></i><?php  echo htmlentities($row->postinDate);?> </a> </div>
+<!-- Job Title limit 250 chars-->  
+<p> <?php echo substr($result->jobDescription,0,300);?></p>
 
-                    <strong class="price"><i class="fa fa-money"></i>$<?php  echo htmlentities($row->salaryPackage);?></strong> 
-                    <?php if($row->jobType=="Full Time"){ ?><a href="jobs-details.php?jid=<?php echo ($row->jobId);?>" class="btn-1 btn-color-2 ripple"><?php  echo htmlentities($row->jobType);?></a>
-<?php } if($row->jobType=="Contract") { ?>
-<a href="jobs-details.php?jid=<?php echo ($row->jobId);?>" class="btn-1 btn-color-4 ripple"><?php  echo htmlentities($row->jobType);?></a>
-<?php } if($row->jobType=="Freelance") { ?>
-<a href="jobs-details.php?jid=<?php echo ($row->jobId);?>" class="btn-1 btn-color-3 ripple"><?php  echo htmlentities($row->jobType);?></a>
-<?php } if($row->jobType=="Part Time") { ?>
-<a href="jobs-details.php?jid=<?php echo ($row->jobId);?>" class="btn-1 btn-color-1 ripple"><?php  echo htmlentities($row->jobType);?></a>
+<!-- Job Location --> 
+<a href="job-details.php?jobid=<?php echo htmlentities($result->jobId);?>" class="text" title='View Details'><i class="fa fa-map-marker"></i>
 
-<?php } ?> 
-                     </div>
+  <?php echo htmlentities($result->jobLocation);?></a> 
 
-                </li>
+<!-- Job Posting date --> 
+<a href="job-details.php?jobid=<?php echo htmlentities($result->jobId);?>" class="text" title='View Details'><i class="fa fa-calendar"></i>
+<?php echo htmlentities($result->postinDate); ?>
+ </a> 
+
+</div>
+</div>
+
+<!-- Job Package --> 
+<strong class="price"><i class="fa fa-money"></i>
+  $<?php echo htmlentities($result->salaryPackage); ?></strong> <br />
+
+
+
+<!-- Job Type--> 
+<!--Full Time -->
+<?php if($result->jobType=='Full Time'):?>
+<a class="btn-1 btn-color-2 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+<!--Part Time -->
+<?php if($result->jobType=='Part Time'):?>
+<a class="btn-1 btn-color-1 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+<!--Half Time -->
+<?php if($result->jobType=='Half Time'):?>
+<a class="btn-1 btn-color-1 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+<!--Freelance -->
+<?php if($result->jobType=='Freelance'):?>
+<a class="btn-1 btn-color-3 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+<!--Contract -->
+<?php if($result->jobType=='Contract'):?>
+<a class="btn-1 btn-color-4 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+<!--Internship -->
+<?php if($result->jobType=='Internship'):?>
+<a class="btn-1 btn-color-2 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+
+<!--Temporary -->
+<?php if($result->jobType=='Temporary'):?>
+<a class="btn-1 btn-color-4 ripple"><?php echo htmlentities($result->jobType); ?> 
+</a> 
+<?php endif;?>
+
+
+
+</div>
+
+</li>
 
  <?php 
 $cnt=$cnt+1;
@@ -174,12 +217,11 @@ $cnt=$cnt+1;
     <h4> No record found against this search</h4>
 
   
-  <?php } ?>
+  <?php } ?>     
 
-            
               </ul>
 
-              <div align="left">
+           <div align="left">
     <ul class="pagination">
 
 <li <?php if($page_no <= 1){ echo "class='disabled'"; } ?>>
@@ -256,7 +298,7 @@ echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
 
           </div>
 
- 
+          
 
         </div>
 
@@ -266,29 +308,6 @@ echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
 
     <!--RECENT JOB SECTION END--> 
 
-    
-
-    <!--CALL TO ACTION SECTION START-->
-
-    <section class="call-action-section">
-
-      <div class="container">
-
-        <div class="text-box">
-
-          <h2>Better Results with Standardized Hiring Process</h2>
-
-          <p>Your quality of hire increases when you treat everyone fairly and equally. Having multiple recruiters
-
-            working on your hiring is beneficial.</p>
-
-        </div>
-
-        <a href="#" class="btn-get">Get Registered &amp; Try Now</a> </div>
-
-    </section>
-
-    <!--CALL TO ACTION SECTION END--> 
   </div>
 
   <!--MAIN END--> 
@@ -296,44 +315,19 @@ echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
   
 
   <!--FOOTER START-->
-<?php include_once('includes/footer.php');?>
+  <?php include('includes/footer.php');?>
+
   <!--FOOTER END--> 
 
 </div>
-
-<!--WRAPPER END--> 
-
-
-
-<!--jQuery START--> 
-
-<!--JQUERY MIN JS--> 
-
-<script src="js/jquery-1.11.3.min.js"></script> 
-
-<!--BOOTSTRAP JS--> 
-
-<script src="js/bootstrap.min.js"></script> 
-
-<!--OWL CAROUSEL JS--> 
-
-<script src="js/owl.carousel.min.js"></script> 
-
-<!--BANNER ZOOM OUT IN--> 
-
-<script src="js/jquery.velocity.min.js"></script> 
-
-<script src="js/jquery.kenburnsy.js"></script> 
-
-<!--SCROLL FOR SIDEBAR NAVIGATION--> 
-
-<script src="js/jquery.mCustomScrollbar.concat.min.js"></script> 
-
-<!--CUSTOM JS--> 
-
-<script src="js/custom.js"></script>
-
+<script src="../js/jquery-1.11.3.min.js"></script> 
+<script src="../js/bootstrap.min.js"></script> 
+<script src="../js/owl.carousel.min.js"></script> 
+<script src="../js/jquery.velocity.min.js"></script> 
+<script src="../js/jquery.kenburnsy.js"></script> 
+<script src="../js/jquery.mCustomScrollbar.concat.min.js"></script> 
+<script src="../js/form.js"></script> 
+<script src="../js/custom.js"></script>
 </body>
-
 </html>
-
+<?php } ?>

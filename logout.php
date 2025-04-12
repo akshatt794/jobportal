@@ -1,11 +1,8 @@
 <?php
-session_start();
-include("includes/config.php");
-$_SESSION['login']=="";
-session_unset();
-session_destroy();
+session_start(); 
 
+unset($_SESSION['emplogin']);
+session_destroy(); // destroy session
+header("location:emp-login.php"); 
 ?>
-<script language="javascript">
-document.location="index.php";
-</script>
+
