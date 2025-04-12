@@ -1,118 +1,120 @@
-// Base class
 //
-// Kickstart any navigation component with a set of style resets. Works with
-// `<nav>`s or `<ul>`s.
+// Nav
+// --------------------------------------------------
 
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-}
-
+// Links
 .nav-link {
-  display: block;
-  padding: $nav-link-padding-y $nav-link-padding-x;
-
-  @include hover-focus {
-    text-decoration: none;
-  }
-
-  // Disabled state lightens text
-  &.disabled {
-    color: $nav-link-disabled-color;
-  }
-}
-
-//
-// Tabs
-//
-
-.nav-tabs {
-  border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
-
-  .nav-item {
-    margin-bottom: -$nav-tabs-border-width;
-  }
-
-  .nav-link {
-    border: $nav-tabs-border-width solid transparent;
-    @include border-top-radius($nav-tabs-border-radius);
+    color: $body-color;
+    font-weight: 600;
 
     @include hover-focus {
-      border-color: $nav-tabs-link-hover-border-color $nav-tabs-link-hover-border-color $nav-tabs-border-color;
+        color: $brand-primary;
+    }
+}
+
+// Tabs block variation
+.nav-tabs-block {
+    background-color: $body-bg-light;
+    border-bottom: none;
+
+    .nav-item {
+        margin-bottom: 0;
     }
 
-    &.disabled {
-      color: $nav-link-disabled-color;
-      background-color: transparent;
-      border-color: transparent;
+    .nav-link {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        border-color: transparent;
+        border-radius: 0;
+
+        @include hover-focus {
+            color: $brand-primary;
+            background-color: transparent;
+            border-color: transparent;
+        }
     }
-  }
 
-  .nav-link.active,
-  .nav-item.show .nav-link {
-    color: $nav-tabs-link-active-color;
-    background-color: $nav-tabs-link-active-bg;
-    border-color: $nav-tabs-link-active-border-color $nav-tabs-link-active-border-color $nav-tabs-link-active-bg;
-  }
-
-  .dropdown-menu {
-    // Make dropdown border overlap tab border
-    margin-top: -$nav-tabs-border-width;
-    // Remove the top rounded corners here since there is a hard edge above the menu
-    @include border-top-radius(0);
-  }
-}
-
-
-//
-// Pills
-//
-
-.nav-pills {
-  .nav-link {
-    @include border-radius($nav-pills-border-radius);
-
-    &.active,
-    .show > & {
-      color: $nav-pills-link-active-color;
-      background-color: $nav-pills-link-active-bg;
+    .nav-link.active,
+    .nav-item.show .nav-link {
+        color: $body-color;
+        background-color: $white;
+        border-color: transparent;
     }
-  }
 }
 
+// Tabs block alternative variation
+.nav-tabs-alt {
+    background-color: transparent;
+    border-bottom-color: $body-bg-dark;
 
-//
-// Justified variants
-//
+    .nav-item {
+        margin-bottom: -3px;
+    }
 
-.nav-fill {
-  .nav-item {
-    flex: 1 1 auto;
-    text-align: center;
-  }
+    .nav-link {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        background-color: transparent;
+        border-color: transparent;
+
+        @include hover-focus {
+            color: $brand-primary;
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: inset 0 -2px $brand-primary;
+        }
+    }
+
+    .nav-link.active,
+    .nav-item.show .nav-link {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: inset 0 -2px $brand-primary;
+    }
 }
 
-.nav-justified {
-  .nav-item {
-    flex-basis: 0;
-    flex-grow: 1;
-    text-align: center;
-  }
-}
+// Users Navigation
+.nav-users {
+    margin: 0;
+    padding: 0;
+    list-style: none;
 
+    > li:last-child > a {
+        border-bottom: none;
+    }
 
-// Tabbable tabs
-//
-// Hide tabbable panes to start, show them when `.active`
+    a {
+        position: relative;
+        padding: 12px 8px 8px 71px;
+        display: block;
+        min-height: 62px;
+        font-weight: 600;
+        border-bottom: 1px solid $body-bg;
 
-.tab-content {
-  > .tab-pane {
-    display: none;
-  }
-  > .active {
-    display: block;
-  }
+        > img {
+            position: absolute;
+            left: 12px;
+            top: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+        }
+
+        > i {
+            position: absolute;
+            left: 40px;
+            top: 40px;
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            background-color: $white;
+            border-radius: 50%;
+        }
+
+        @include hover {
+            background-color: $body-bg-light;
+        }
+    }
 }

@@ -1,43 +1,92 @@
-// Responsive images (ensure images don't scale beyond their parents)
 //
-// This is purposefully opt-in via an explicit class rather than being the default for all `<img>`s.
-// We previously tried the "images are responsive by default" approach in Bootstrap v2,
-// and abandoned it in Bootstrap v3 because it breaks lots of third-party widgets (including Google Maps)
-// which weren't expecting the images within themselves to be involuntarily resized.
-// See also https://github.com/twbs/bootstrap/issues/18178
-.img-fluid {
-  @include img-fluid;
+// Image (links and hover options)
+// --------------------------------------------------
+
+// Avatar
+.img-avatar {
+    display: inline-block !important;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+
+    &.img-avatar16 {
+        width: 16px;
+        height: 16px;
+    }
+
+    &.img-avatar20 {
+        width: 20px;
+        height: 20px;
+    }
+
+    &.img-avatar32 {
+        width: 32px;
+        height: 32px;
+    }
+
+    &.img-avatar48 {
+        width: 48px;
+        height: 48px;
+    }
+
+    &.img-avatar96 {
+        width: 96px;
+        height: 96px;
+    }
+
+    &.img-avatar128 {
+        width: 128px;
+        height: 128px;
+    }
+
+    &-thumb {
+        margin: 5px;
+        box-shadow: 0 0 0 5px rgba(255,255,255,.4);
+    }
+
+    &.img-avatar-rounded {
+        border-radius: 3px;
+    }
+
+    &.img-avatar-square {
+        border-radius: 0;
+    }
 }
 
-
-// Image thumbnails
-.img-thumbnail {
-  padding: $thumbnail-padding;
-  background-color: $thumbnail-bg;
-  border: $thumbnail-border-width solid $thumbnail-border-color;
-  @include border-radius($thumbnail-border-radius);
-  @include transition($thumbnail-transition);
-  @include box-shadow($thumbnail-box-shadow);
-
-  // Keep them at most 100% wide
-  @include img-fluid;
+// Image Thumb
+.img-thumb {
+    padding: 6px;
+    background-color: $white;
+    border-radius: 3px;
 }
 
-//
-// Figures
-//
+// Image Link
+.img-link {
+    display: inline-block;
+    transition: transform .25s ease-out, opacity .25s ease-out;
 
-.figure {
-  // Ensures the caption's text aligns with the image.
-  display: inline-block;
+    @include hover {
+        transform: scale(1.04);
+        opacity: .75;
+    }
+
+    &:active {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    &.img-link-simple:hover {
+        transform: scale(1);
+    }
 }
 
-.figure-img {
-  margin-bottom: ($spacer / 2);
-  line-height: 1;
+.img-link-zoom-in {
+    cursor: -webkit-zoom-in;
+    cursor: zoom-in;
 }
 
-.figure-caption {
-  font-size: $figure-caption-font-size;
-  color: $figure-caption-color;
+// Responsive
+.img-fluid.img-fluid-100,
+.img-fluid-100 .img-fluid {
+    width: 100%;
 }

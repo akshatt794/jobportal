@@ -1,34 +1,31 @@
+//
+// Transitions
+// --------------------------------------------------
+
 .fade {
-  opacity: 0;
-  @include transition($transition-fade);
+    transition: opacity .15s ease-out, transform .3s ease-out;
 
-  &.show {
-    opacity: 1;
-  }
-}
+    &.fade-up {
+        transform: translateY(100px);
 
-.collapse {
-  display: none;
-  &.show {
-    display: block;
-  }
-}
+        &.show {
+            transform: translateY(0);
+        }
+    }
 
-tr {
-  &.collapse.show {
-    display: table-row;
-  }
-}
+    &.fade-right {
+        transform: translateX(-100px);
 
-tbody {
-  &.collapse.show {
-    display: table-row-group;
-  }
-}
+        &.show {
+            transform: translateX(0);
+        }
+    }
 
-.collapsing {
-  position: relative;
-  height: 0;
-  overflow: hidden;
-  @include transition($transition-collapse);
+    &.fade-left {
+        transform: translateX(100px);
+
+        &.show {
+            transform: translateX(0);
+        }
+    }
 }

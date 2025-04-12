@@ -1,141 +1,111 @@
-// scss-lint:disable QualifyingElement
-
 //
-// Base styles
-//
+// Buttons
+// --------------------------------------------------
 
 .btn {
-  display: inline-block;
-  font-weight: $btn-font-weight;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  user-select: none;
-  border: $input-btn-border-width solid transparent;
-  @include button-size($input-btn-padding-y, $input-btn-padding-x, $font-size-base, $input-btn-line-height, $btn-border-radius);
-  @include transition($btn-transition);
+    height: $pbf-height;
+    font-family: $font-family-base;
+    font-weight: 600;
 
-  // Share hover and focus styles
-  @include hover-focus {
-    text-decoration: none;
-  }
-  &:focus,
-  &.focus {
-    outline: 0;
-    box-shadow: $btn-focus-box-shadow;
-  }
-
-  // Disabled comes first so active can properly restyle
-  &.disabled,
-  &:disabled {
-    opacity: .65;
-    @include box-shadow(none);
-  }
-
-  &:active,
-  &.active {
-    background-image: none;
-    @include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
-  }
-}
-
-// Future-proof disabling of clicks on `<a>` elements
-a.btn.disabled,
-fieldset[disabled] a.btn {
-  pointer-events: none;
-}
-
-
-//
-// Alternate buttons
-//
-
-@each $color, $value in $theme-colors {
-  .btn-#{$color} {
-    @include button-variant($value, $value);
-  }
-}
-
-@each $color, $value in $theme-colors {
-  .btn-outline-#{$color} {
-    @include button-outline-variant($value, #fff);
-  }
-}
-
-
-//
-// Link buttons
-//
-
-// Make a button look and behave like a link
-.btn-link {
-  font-weight: $font-weight-normal;
-  color: $link-color;
-  border-radius: 0;
-
-  &,
-  &:active,
-  &.active,
-  &:disabled {
-    background-color: transparent;
-    @include box-shadow(none);
-  }
-  &,
-  &:focus,
-  &:active {
-    border-color: transparent;
-    box-shadow: none;
-  }
-  @include hover {
-    border-color: transparent;
-  }
-  @include hover-focus {
-    color: $link-hover-color;
-    text-decoration: $link-hover-decoration;
-    background-color: transparent;
-  }
-  &:disabled {
-    color: $btn-link-disabled-color;
-
-    @include hover-focus {
-      text-decoration: none;
+    &.btn-square {
+        border-radius: 0 !important;
     }
-  }
+
+    &.btn-rounded {
+        border-radius: 50px !important;
+    }
+
+    .si {
+        position: relative;
+        top: 1px;
+    }
 }
 
-
-//
-// Button Sizes
-//
-
-.btn-lg {
-  @include button-size($input-btn-padding-y-lg, $input-btn-padding-x-lg, $font-size-lg, $line-height-lg, $btn-border-radius-lg);
+.btn-sm,
+.btn-group-sm > .btn {
+    height: $pbf-height-sm;
 }
 
-.btn-sm {
-  @include button-size($input-btn-padding-y-sm, $input-btn-padding-x-sm, $font-size-sm, $line-height-sm, $btn-border-radius-sm);
+.btn-lg,
+.btn-group-lg > .btn {
+    height: $pbf-height-lg;
 }
 
+.btn.btn-hero {
+    @include button-size($btn-hero-padding-y, $btn-hero-padding-x, $font-size-base, $pbf-line-height, 3px);
+    height: auto;
 
-//
-// Block button
-//
+    &.btn-sm {
+        @include button-size($btn-hero-padding-y-sm, $btn-hero-padding-x-sm, $font-size-base, $pbf-line-height-sm, 3px);
+    }
 
-.btn-block {
-  display: block;
-  width: 100%;
+    &.btn-lg {
+        @include button-size($btn-hero-padding-y-lg, $btn-hero-padding-x-lg, $font-size-md, $pbf-line-height-lg, 3px);
+    }
 }
 
-// Vertically space out multiple block buttons
-.btn-block + .btn-block {
-  margin-top: $btn-block-spacing-y;
+.btn.btn-circle {
+    @include button-size(9px, 0, $font-size-base, 1, inherit);
+    min-width: $pbf-height;
+    height: $pbf-height;
+    text-align: center;
+    border-radius: 50% !important;
+
+    &.btn-sm {
+        @include button-size(6px, 0, $font-size-base, 1, inherit);
+        min-width: $pbf-height-sm;
+        height: $pbf-height-sm;
+    }
+
+    &.btn-lg {
+        @include button-size(12px, 0, $font-size-base, 1, inherit);
+        min-width: $pbf-height-lg;
+        height: $pbf-height-lg;
+    }
+
+    > .si {
+        top: 0;
+    }
 }
 
-// Specificity overrides
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-  &.btn-block {
-    width: 100%;
-  }
+.btn-secondary {
+    @include button-variant($body-bg, $body-bg);
+}
+
+.btn-outline-secondary {
+    @include button-outline-variant(darken($body-bg-dark, 40%));
+}
+
+.btn-alt-primary {
+    @include button-alt-variant($brand-primary, $brand-lighter);
+}
+
+.btn-alt-secondary {
+    @include button-alt-variant($body-color, $body-bg-dark);
+}
+
+.btn-alt-success {
+    @include button-alt-variant($brand-success, $brand-success-light);
+}
+
+.btn-alt-info {
+    @include button-alt-variant($brand-info, $brand-info-light);
+}
+
+.btn-alt-warning {
+    @include button-alt-variant($brand-warning, $brand-warning-light);
+}
+
+.btn-alt-danger {
+    @include button-alt-variant($brand-danger, $brand-danger-light);
+}
+
+// Used for buttons that adapt to light/dark header and sidebar variations
+.btn-dual-secondary {
+    @include button-dual-variant(darken($body-color, 22%), darken($body-bg, 10%));
+}
+
+.page-header-inverse #page-header .btn-dual-secondary,
+.sidebar-inverse #sidebar .btn-dual-secondary {
+    @include button-dual-variant($white, $brand-darker);
 }
